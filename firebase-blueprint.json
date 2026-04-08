@@ -1,0 +1,116 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information and role-based access data.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user." },
+        "email": { "type": "string", "format": "email", "description": "User's email address." },
+        "phone": { "type": "string", "description": "User's phone number." },
+        "name": { "type": "string", "description": "User's full name." },
+        "role": { "type": "string", "enum": ["student", "faculty", "admin"], "description": "User's role in the system." },
+        "class": { "type": "string", "description": "Student's current class/grade." },
+        "enrolledCourses": { "type": "array", "items": { "type": "string" }, "description": "List of course IDs the student is enrolled in." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the user was created." }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Educational course details.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string", "description": "JEE, NEET, UPSC, etc." },
+        "price": { "type": "number" },
+        "thumbnail": { "type": "string" },
+        "facultyId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "category", "price"]
+    },
+    "Batch": {
+      "title": "Batch",
+      "description": "A specific instance or group for a course.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "name": { "type": "string" },
+        "schedule": { "type": "string" },
+        "students": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["courseId", "name"]
+    },
+    "Lesson": {
+      "title": "Lesson",
+      "description": "Individual lecture or content piece.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "batchId": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string", "enum": ["live", "recorded", "pdf", "assignment"] },
+        "contentUrl": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "subject": { "type": "string" }
+      },
+      "required": ["batchId", "title", "type"]
+    },
+    "Test": {
+      "title": "Test",
+      "description": "Mock test or quiz.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "batchId": { "type": "string" },
+        "title": { "type": "string" },
+        "duration": { "type": "number", "description": "Duration in minutes." },
+        "questions": { "type": "array", "items": { "type": "object" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["batchId", "title"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "Student's test submission.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "testId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "score": { "type": "number" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["testId", "studentId"]
+    },
+    "Doubt": {
+      "title": "Doubt",
+      "description": "Student's question for doubt solving.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "studentId": { "type": "string" },
+        "batchId": { "type": "string" },
+        "question": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "resolved"] },
+        "answer": { "type": "string" },
+        "facultyId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["studentId", "question", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles." },
+    "/courses/{courseId}": { "schema": "Course", "description": "Courses available." },
+    "/batches/{batchId}": { "schema": "Batch", "description": "Course batches." },
+    "/lessons/{lessonId}": { "schema": "Lesson", "description": "Lessons within batches." },
+    "/tests/{testId}": { "schema": "Test", "description": "Tests for batches." },
+    "/submissions/{submissionId}": { "schema": "Submission", "description": "Test submissions." },
+    "/doubts/{doubtId}": { "schema": "Doubt", "description": "Doubt solving requests." }
+  }
+}

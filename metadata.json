@@ -1,0 +1,8 @@
+{
+  "name": "Remix: sanjitclaases",
+  "description": "A comprehensive educational platform replicating PhysicsWallah features, including live classes, recorded lectures, mock tests, doubt solving, and a robust admin panel.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
